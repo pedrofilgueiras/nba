@@ -317,7 +317,7 @@
     data <-
       data %>%
       mutate(slugLeague = league) %>%
-      nest(-c(idGame, slugLeague), .key = dataBoxScore) %>%
+      nest_legacy(-c(idGame, slugLeague), .key = dataBoxScore) %>%
       mutate(typeResult = result_type,
              typeBoxScore = boxscore) %>%
       mutate(cols = dataBoxScore %>% map_dbl(ncol)) %>%
@@ -432,7 +432,7 @@ box_scores <-
                 df_results %>%
                 filter(typeBoxScore == table) %>%
                 select(idGame, dataBoxScore) %>%
-                unnest()
+                unnest_legacy()
 
 
               if (table_slug == "usage") {
@@ -495,7 +495,7 @@ box_scores <-
               all_data %>%
               filter(typeResult == result) %>%
               select(-typeResult) %>%
-              unnest()
+              unnest_legacy()
 
             if (df_table %>% tibble::has_name("groupStartPosition")) {
               df_table <-
