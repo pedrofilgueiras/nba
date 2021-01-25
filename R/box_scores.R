@@ -324,7 +324,7 @@
       filter(cols > 1) %>%
       select(-cols) %>%
       select(typeBoxScore, typeResult, everything())
-    gc()
+    #gc()
     data
   })
 
