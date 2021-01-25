@@ -445,7 +445,7 @@ box_scores <-
 
                 data <-
                   data %>%
-                  dplyr::select(-one_of(
+                  dplyr::select(-any_of(
                     c(
                       "pctFG",
                       "groupStartPosition",
