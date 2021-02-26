@@ -61,10 +61,9 @@
       
     }
     
-    print("OK")
+    print(url)
     json <-
       .curl_chinazi(url = url)
-    print("OK after chinazi")
     
     data <-
       json %>%
