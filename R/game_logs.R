@@ -10,6 +10,7 @@
            date_from = NULL,
            date_to =  Sys.Date() + 1,
            return_message = TRUE,
+           timeout = timeout,
            ...) {
     if (season < 1947) {
       stop("NBA data starts for the 1946-47 season")
@@ -62,7 +63,7 @@
     }
     
     json <-
-      .curl_chinazi(url = url)
+      .curl_chinazi(url = url, timeout=timeout)
     
     data <-
       json %>%
@@ -304,7 +305,8 @@ game_logs <-
             result_type = result,
             season_type = season_type,
             return_message = return_message,
-            league = league
+            league = league,
+            timeout=timeout
           )
         data_row
       })
