@@ -309,7 +309,7 @@ game_logs <-
           )
         data_row
       })
-    print("versao nova")
+    
     if (result_length == 1 && all_data %>% tibble::has_name("typeResult")) {
       all_data <- all_data %>%
         select(-typeResult)
