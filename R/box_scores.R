@@ -20,6 +20,7 @@
            result_type = "player",
            boxscore = "tracking",
            return_message = T,
+           timeout=20,
            ...) {
 
     type_slug <- str_to_lower(result_type)
@@ -90,7 +91,7 @@
 
     json <-
       json_url  %>%
-      .curl_chinazi()
+      .curl_chinazi(timeout=timeout)
 
     if (names(json) %>% str_detect( "g") %>% sum(na.rm = T) > 0) {
       json_data <- json$g
@@ -370,7 +371,8 @@ box_scores <-
            result_types = c("player", "team"),
            join_data = TRUE,
            assign_to_environment = TRUE,
-           return_message = TRUE) {
+           return_message = TRUE,
+           timeout=20) {
     if (game_ids %>% purrr::is_null()) {
       stop("Please enter game ids")
     }
