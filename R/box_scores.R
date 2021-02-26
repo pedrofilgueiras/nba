@@ -407,7 +407,8 @@ box_scores <-
             result_type = result_type,
             boxscore = boxscore,
             league = league,
-            return_message = return_message
+            return_message = return_message,
+            timeout = timeout,
           )
       })
 
