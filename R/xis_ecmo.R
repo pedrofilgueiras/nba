@@ -1,7 +1,6 @@
 .curl_chinazi <-
   function(url = "https://stats.nba.com/stats/leaguegamelog?Counter=1000&Season=2019-20&Direction=DESC&LeagueID=00&PlayerOrTeam=P&SeasonType=Regular%20Season&Sorter=DATE",timeout=20) {
-    library(httr)
-
+    
     headers = c(
       `Connection` = 'close',
       `Accept` = 'application/json, text/plain, */*',
@@ -45,9 +44,6 @@
     #   `Accept-Language` = 'en-US,en;q=0.9'
     # )
     
-    print(url)
-    print(headers)
-    print(timeout)
     res <-
       httr::GET(url,
                 httr::add_headers(.headers = headers), timeout(timeout))
