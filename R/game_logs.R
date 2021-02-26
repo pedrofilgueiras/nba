@@ -316,7 +316,6 @@ game_logs <-
       return(all_data)
     }
     if (assign_to_environment) {
-      print("chegou aqui")
       results <-
         all_data$typeResult %>% unique()
       
