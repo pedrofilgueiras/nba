@@ -45,12 +45,13 @@
     #   `Accept-Language` = 'en-US,en;q=0.9'
     # )
     
-    print("antes get")
+    print(url)
+    print(headers)
+    print(timeout)
     res <-
       httr::GET(url,
                 httr::add_headers(.headers = headers), timeout(timeout))
 
-    print("depois get")
     json <-
       res$content %>%
       rawToChar() %>%
