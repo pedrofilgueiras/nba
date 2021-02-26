@@ -45,8 +45,7 @@
     # )
     
     res <-
-      httr::GET(url,
-                httr::add_headers(.headers = headers), timeout(timeout))
+      GET(url,add_headers(.headers = headers), timeout(timeout))
 
     json <-
       res$content %>%
