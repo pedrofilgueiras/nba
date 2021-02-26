@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.httr-oauth
+.*.Rnb.cached
+/dev
+/depricated
+.Rproj
+./tests
