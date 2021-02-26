@@ -61,7 +61,6 @@
       
     }
     
-    print(url)
     json <-
       .curl_chinazi(url = url)
     
