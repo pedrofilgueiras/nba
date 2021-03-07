@@ -10,7 +10,7 @@
            date_from = NULL,
            date_to =  Sys.Date() + 1,
            return_message = TRUE,
-           timeout = timeout,
+           x_timeout = 20,
            ...) {
     if (season < 1947) {
       stop("NBA data starts for the 1946-47 season")
@@ -63,7 +63,11 @@
     }
     
     json <-
-      .curl_chinazi(url = url, timeout=timeout)
+      .curl_chinazi(url = url, x_timeout=x_timeout)
+    
+    if (length(json[["resultSets"]][["rowSet"]][[1]])==0) {
+      return(NULL)
+    }
     
     data <-
       json %>%
@@ -261,6 +265,7 @@ game_logs <-
            nest_data = F,
            assign_to_environment = TRUE,
            return_message = TRUE,
+           x_timeout = 20,
            ...) {
     if (length(seasons) == 0) {
       stop("Please enter season(s)")
@@ -306,7 +311,7 @@ game_logs <-
             season_type = season_type,
             return_message = return_message,
             league = league,
-            timeout=timeout
+            x_timeout=x_timeout
           )
         data_row
       })

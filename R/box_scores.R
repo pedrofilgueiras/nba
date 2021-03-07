@@ -20,7 +20,13 @@
            result_type = "player",
            boxscore = "tracking",
            return_message = T,
-           timeout=20,
+           x_timeout=20,
+           custom_header=NULL,
+           url_proxy=NULL,
+           port=NULL,
+           username=NULL,
+           password=NULL,
+           have_JSON=NULL,
            ...) {
 
     type_slug <- str_to_lower(result_type)
@@ -88,11 +94,24 @@
     if (boxscore == "hustle") {
       json_url <- glue::glue("https://stats.nba.com/stats/hustlestatsboxscore?GameID=00{game_id}") %>% as.character()
     }
-
+    
+    if (is.null(have_JSON)) {
     json <-
       json_url  %>%
-      .curl_chinazi(timeout=timeout)
-
+      .curl_chinazi(x_timeout=x_timeout,
+                    custom_header=custom_header,
+                    url_proxy=url_proxy,
+                    port=port,
+                    username=username,
+                    password=password
+                    )
+    return(json)
+    } else
+    {
+      json=have_JSON
+    }
+    
+    
     if (names(json) %>% str_detect( "g") %>% sum(na.rm = T) > 0) {
       json_data <- json$g
       df_classes <-
@@ -372,7 +391,13 @@ box_scores <-
            join_data = TRUE,
            assign_to_environment = TRUE,
            return_message = TRUE,
-           timeout=20) {
+           x_timeout=20,
+           custom_header=NULL,
+           url_proxy=NULL,
+           port=NULL,
+           username=NULL,
+           password=NULL
+           ) {
     if (game_ids %>% purrr::is_null()) {
       stop("Please enter game ids")
     }
@@ -390,17 +415,31 @@ box_scores <-
                   stringsAsFactors = F) %>%
       dplyr::as_tibble()
 
-
-
     get_box_score_type_safe <-
       purrr::possibly(.get_box_score_type, tibble())
-
+    
+    pulled_json <<- get_box_score_type_safe(
+      game_id = input_df$game_id[1],
+      result_type = input_df$result_type[1],
+      boxscore = input_df$boxscore[1],
+      league = league,
+      return_message = return_message,
+      x_timeout = x_timeout,
+      custom_header=custom_header,
+      url_proxy=url_proxy,
+      use_proxy=use_proxy,
+      port=port,
+      username=username,
+      password=password,
+      have_JSON=NULL,
+    )
+    
     all_data <-
       1:nrow(input_df) %>%
       future_map_dfr(function(x) {
         df_row <-
           input_df %>% slice(x)
-
+        
         df_row %$%
           get_box_score_type_safe(
             game_id = game_id,
@@ -408,10 +447,17 @@ box_scores <-
             boxscore = boxscore,
             league = league,
             return_message = return_message,
-            timeout = timeout,
+            x_timeout = x_timeout,
+            custom_header=custom_header,
+            url_proxy=url_proxy,
+            use_proxy=use_proxy,
+            port=port,
+            username=username,
+            password=password,
+            have_JSON=pulled_json,
           )
       })
-
+    
     if (join_data  &&
         league == "NBA") {
       results <-

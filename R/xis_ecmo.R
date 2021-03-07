@@ -1,5 +1,13 @@
 .curl_chinazi <-
-  function(url = "https://stats.nba.com/stats/leaguegamelog?Counter=1000&Season=2019-20&Direction=DESC&LeagueID=00&PlayerOrTeam=P&SeasonType=Regular%20Season&Sorter=DATE",timeout=20) {
+  function(url = "https://stats.nba.com/stats/leaguegamelog?Counter=1000&Season=2019-20&Direction=DESC&LeagueID=00&PlayerOrTeam=P&SeasonType=Regular%20Season&Sorter=DATE",
+           x_timeout=20,
+           custom_header=NULL,
+           url_proxy=NULL,
+           port=NULL,
+           username=NULL,
+           password=NULL) {
+    library(httr)
+    library(rvest)
     
     headers = c(
       `Connection` = 'close',
@@ -28,6 +36,10 @@
       `Cache-Control` = 'no-cache'
     )
 
+        if (!is.null(custom_header)){
+      headers <- custom_header
+    }
+    
     # headers = c(
     #   `Connection` = 'close',
     #   `Pragma` = 'no-cache',
@@ -44,10 +56,22 @@
     #   `Accept-Language` = 'en-US,en;q=0.9'
     # )
     
-    res <-
-      httr::GET(url,
-                httr::add_headers(.headers = headers), timeout(timeout))
-
+    #print(url)
+    
+    if (is.null(url_proxy)){
+    res <- GET(url, timeout(x_timeout),add_headers(.headers = headers))
+    } else {
+      if (is.null(port) && is.null(username)){
+        res <- httr::GET(url, use_proxy(url_proxy,port=port,password=password,username=username), timeout(x_timeout), add_headers(.headers = headers))
+        } else if(!is.null(port) && is.null(username))
+        {
+          res <- httr::GET(url, use_proxy(url_proxy,port=port), timeout(x_timeout), add_headers(.headers = headers))
+        }else {
+          res <- httr::GET(url, use_proxy(url_proxy), timeout(x_timeout), add_headers(.headers = headers))
+        }
+      
+      }
+    
     json <-
       res$content %>%
       rawToChar() %>%
